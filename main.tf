@@ -5,8 +5,26 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "b" {
-  bucket = "my-tf-test-test1-bucket"
+  bucket = "${var.screenshot_bucket_name}"
   acl    = "private"
-  policy = "${file("publicPolicy.json")}"
+}
+resource "aws_s3_bucket_policy" "b" {
+  bucket = "${aws_s3_bucket.b.id}"
 
+  policy = <<POLICY
+{
+  "Version": "2008-10-17",
+  "Statement": [
+      {
+          "Sid": "AllowPublicRead",
+          "Effect": "Allow",
+          "Principal": {
+              "AWS": "*"
+          },
+          "Action": "s3:GetObject",
+          "Resource": "arn:aws:s3:::${var.screenshot_bucket_name}/*"
+      }
+  ]
+}
+POLICY
 }
