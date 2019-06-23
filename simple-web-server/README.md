@@ -1,0 +1,1 @@
+Don't forget to change `variables-example.tfvars` to `variables.tfvars` and fill the necessary inputs.
